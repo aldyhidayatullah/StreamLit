@@ -36,11 +36,13 @@ def main():
     # Styling Custom CSS for background, header, and sidebar
     st.markdown("""
         <style>
-            /* Global styling */
+            /* Body Styling */
             body {
                 background-color: black;
                 font-family: 'Arial', sans-serif;
                 color: #333;
+                margin: 0;
+                padding: 0;
             }
 
             /* Header Styling */
@@ -131,10 +133,12 @@ def main():
                 transition: border-color 0.3s;
             }
              .custom-text {
+            font-weight:bold;
             color: #44c8b1;
             }
              .custom-font {
             color: #E50000;
+            font-weight :bold;
             }
             .stNumberInput input:focus {
                 border-color: #1e7f5b;
@@ -142,7 +146,7 @@ def main():
         </style>
     """, unsafe_allow_html=True)
 
-    st.title("📊 Regression Analysis App")
+    st.markdown("<h1 style='color:#44c8b1;'>📊 Regression Analysis App</h1>", unsafe_allow_html=True)
     st.sidebar.header("📂 Navigation")
 
     # Sidebar navigation
@@ -156,7 +160,9 @@ def main():
             unsafe_allow_html=True,
         )
         image_url ="https://i.imgur.com/MdMCXbW.png"
-        st.image(image_url, caption="Data Analysis App",)
+        st.image(image_url, caption="")
+        st.markdown('<p style="color:#44c8b1; text-align: center;">Data Analysis App</p>', unsafe_allow_html=True)
+
 
     elif choice == "📈 Data Exploration":
         st.markdown("<div class='section-title'>🔍 Data Exploration</div>", unsafe_allow_html=True)
@@ -206,14 +212,14 @@ def main():
 
             # Model performance
             y_pred = model.predict(X_test)
-            st.markdown("<span style='color:red;'>Model Perfomance</span>", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>Model Perfomance</span>", unsafe_allow_html=True)
             st.markdown(f"<h3 style='color:#44c8b1;'>Mean Squared Error: {mean_squared_error(y_test, y_pred):.2f}</h3>", unsafe_allow_html=True)
             st.markdown(f"<h3 style='color:#44c8b1;'>R-squared: {r2_score(y_test, y_pred):.2f}</h3>", unsafe_allow_html=True)
 
             # Debugging output
             st.markdown(f"<h3 style='color:#44c8b1;'>Predicted Values (some examples): {y_pred[:5]}</h3>", unsafe_allow_html=True)
 
-            st.markdown("<span style='color:red;'>Prediksi Charges</span>", unsafe_allow_html=True)
+            st.markdown("<span style='color:red; font-weight:bold;'>Prediksi Charges</span>", unsafe_allow_html=True)
             st.markdown("<h3 style='color:#44c8b1;'>Age</h3>", unsafe_allow_html=True)
             age = st.number_input("", min_value=0, max_value=100, value=30, step=1)
 
