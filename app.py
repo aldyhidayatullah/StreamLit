@@ -38,7 +38,7 @@ def main():
         <style>
             /* Global styling */
             body {
-                background-color: #212121;
+                background-color: black;
                 font-family: 'Arial', sans-serif;
                 color: #333;
             }
@@ -105,7 +105,7 @@ def main():
             /* Button Styling */
             .stButton>button {
                 background-color: #44c8b1;
-                color: white;
+                color: black;
                 border-radius: 8px;
                 padding: 12px 25px;
                 font-size: 18px;
@@ -130,7 +130,12 @@ def main():
                 border-radius: 8px;
                 transition: border-color 0.3s;
             }
-
+             .custom-text {
+            color: #44c8b1;
+            }
+             .custom-font {
+            color: #E50000;
+            }
             .stNumberInput input:focus {
                 border-color: #1e7f5b;
             }
@@ -155,13 +160,13 @@ def main():
 
     elif choice == "📈 Data Exploration":
         st.markdown("<div class='section-title'>🔍 Data Exploration</div>", unsafe_allow_html=True)
-        st.write("### Dataset Overview")
+        st.markdown('<p class="custom-font">Dataset Overview</p>', unsafe_allow_html=True)
         st.dataframe(data.head(), use_container_width=True)
 
-        st.write("### Summary Statistics")
+        st.markdown('<p class="custom-font">Summary Statistics</p>', unsafe_allow_html=True)
         st.dataframe(data.describe(), use_container_width=True)
 
-        st.write("### Data Types")
+        st.markdown('<p class="custom-font">Data Types</p>', unsafe_allow_html=True)
         st.dataframe(pd.DataFrame(data.dtypes, columns=["Type"]).reset_index().rename(columns={"index": "Column"}), use_container_width=True)
 
     elif choice == "📊 Visualization":
@@ -173,17 +178,16 @@ def main():
         st.sidebar.subheader("Scatter Plot Settings")
         col1 = st.sidebar.selectbox("Select X-axis", numeric_columns)
         col2 = st.sidebar.selectbox("Select Y-axis", numeric_columns)
-
         if col1 and col2:
-            st.write(f"### Scatter Plot: {col1} vs {col2}")
+            st.markdown('<p class="custom-text">Scatter Plot: COL 1 VS COL 2</p>', unsafe_allow_html=True)
             fig, ax = plt.subplots()
             sns.scatterplot(data=data, x=col1, y=col2, ax=ax)
             st.pyplot(fig)
 
-        st.write("### Correlation Heatmap")
-        fig, ax = plt.subplots(figsize=(10, 6))
-        sns.heatmap(data[numeric_columns].corr(), annot=True, cmap="coolwarm", ax=ax)
-        st.pyplot(fig)
+            st.markdown('<p class="custom-text">Correlation Heatmap</p>', unsafe_allow_html=True)
+            fig, ax = plt.subplots(figsize=(10, 6))
+            sns.heatmap(data[numeric_columns].corr(), annot=True, cmap="coolwarm", ax=ax)
+            st.pyplot(fig)
 
     elif choice == "🤖 Prediction":
         st.markdown("<div class='section-title'>🤖 Prediction using Support Vector Regression</div>", unsafe_allow_html=True)
@@ -202,17 +206,23 @@ def main():
 
             # Model performance
             y_pred = model.predict(X_test)
-            st.write("### Model Performance")
-            st.metric("Mean Squared Error", f"{mean_squared_error(y_test, y_pred):.2f}")
-            st.metric("R-squared", f"{r2_score(y_test, y_pred):.2f}")
+            st.markdown("<span style='color:red;'>Model Perfomance</span>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='color:#44c8b1;'>Mean Squared Error: {mean_squared_error(y_test, y_pred):.2f}</h3>", unsafe_allow_html=True)
+            st.markdown(f"<h3 style='color:#44c8b1;'>R-squared: {r2_score(y_test, y_pred):.2f}</h3>", unsafe_allow_html=True)
 
             # Debugging output
-            st.write(f"### Predicted Values (some examples): {y_pred[:5]}")  # Tampilkan prediksi pertama
+            st.markdown(f"<h3 style='color:#44c8b1;'>Predicted Values (some examples): {y_pred[:5]}</h3>", unsafe_allow_html=True)
 
-            st.write("### Prediksi Charges")
-            age = st.number_input("Age", min_value=0, max_value=100, value=30, step=1)
-            bmi = st.number_input("BMI", min_value=10.0, max_value=50.0, value=25.0, step=0.1)
-            children = st.number_input("Children", min_value=0, max_value=10, value=0, step=1)
+            st.markdown("<span style='color:red;'>Prediksi Charges</span>", unsafe_allow_html=True)
+            st.markdown("<h3 style='color:#44c8b1;'>Age</h3>", unsafe_allow_html=True)
+            age = st.number_input("", min_value=0, max_value=100, value=30, step=1)
+
+            st.markdown("<h3 style='color:#44c8b1;'>BMI</h3>", unsafe_allow_html=True)
+            bmi = st.number_input("", min_value=10.0, max_value=50.0, value=25.0, step=0.1)
+
+            st.markdown("<h3 style='color:#44c8b1;'>Children</h3>", unsafe_allow_html=True)
+            children = st.number_input("", min_value=0, max_value=10, value=0, step=1)
+
 
             if st.button("Predict"):
                 pred = model.predict([[age, bmi, children]])[0]
