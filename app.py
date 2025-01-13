@@ -8,12 +8,19 @@ from sklearn.metrics import mean_squared_error, r2_score
 
 # Load dataset
 data_path = "Regression.csv"
+data = None
 try:
     data = pd.read_csv(data_path)
 except FileNotFoundError:
     st.error("Dataset tidak ditemukan! Pastikan 'Regression.csv' ada di path yang benar.")
-    data = None
-
+    
+# Periksa apakah dataset mengandung nilai NaN atau Infinity
+if data is not None:
+    if data.isnull().sum().sum() > 0:
+        st.error("Data mengandung nilai NaN. Silakan bersihkan dataset.")
+    if (data == float('inf')).sum().sum() > 0:
+        st.error("Data mengandung nilai Infinity. Silakan bersihkan dataset.")
+        
 # Streamlit App
 def main():
     if data is None:
@@ -144,7 +151,7 @@ def main():
             unsafe_allow_html=True,
         )
         image_url ="https://i.imgur.com/MdMCXbW.png"
-        st.image(image_url, caption="Data Analysis App", use_container_width=True)
+        st.image(image_url, caption="Data Analysis App",)
 
     elif choice == "📈 Data Exploration":
         st.markdown("<div class='section-title'>🔍 Data Exploration</div>", unsafe_allow_html=True)
@@ -199,12 +206,8 @@ def main():
             st.metric("Mean Squared Error", f"{mean_squared_error(y_test, y_pred):.2f}")
             st.metric("R-squared", f"{r2_score(y_test, y_pred):.2f}")
 
-            st.write("### Model Feature Importances")
-            importance_df = pd.DataFrame({
-                "Feature": features,
-                "Importance": [1] * len(features)  # Placeholder value for features
-            }).sort_values(by="Importance", ascending=False)
-            st.dataframe(importance_df)
+            # Debugging output
+            st.write(f"### Predicted Values (some examples): {y_pred[:5]}")  # Tampilkan prediksi pertama
 
             st.write("### Prediksi Charges")
             age = st.number_input("Age", min_value=0, max_value=100, value=30, step=1)
@@ -213,6 +216,7 @@ def main():
 
             if st.button("Predict"):
                 pred = model.predict([[age, bmi, children]])[0]
+                st.write(f"Debugging: Predicted Charges for Age={age}, BMI={bmi}, Children={children}: {pred:.2f}")
                 st.success(f"Predicted Charges: {pred:.2f}")
         else:
             st.error("Kolom yang dibutuhkan untuk prediksi tidak ada dalam dataset.")
