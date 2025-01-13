@@ -38,7 +38,7 @@ def main():
         <style>
             /* Global styling */
             body {
-                background-color: #f7f8fc;
+                background-color: #00000;
                 font-family: 'Arial', sans-serif;
                 color: #333;
             }
