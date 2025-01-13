@@ -143,7 +143,7 @@ def main():
             <p class="subheader">Analisis Data, Visualisasikan Wawasan, dan Prediksi Hasil Secara Mudah.</p>""",
             unsafe_allow_html=True,
         )
-        st.image("data.png", caption="Data Analysis App", use_container_width=True, width=300)
+        st.image("img/data.png", caption="Data Analysis App", use_container_width=True, width=300)
 
     elif choice == "📈 Data Exploration":
         st.markdown("<div class='section-title'>🔍 Data Exploration</div>", unsafe_allow_html=True)
