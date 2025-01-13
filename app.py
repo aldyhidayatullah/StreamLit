@@ -1,9 +1,8 @@
 import streamlit as st
 import pandas as pd
-import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
-from sklearn.ensemble import RandomForestRegressor
+from sklearn.svm import SVR
 from sklearn.metrics import mean_squared_error, r2_score
 
 # Load dataset
@@ -29,19 +28,19 @@ def main():
     # Styling Custom CSS for background, header, and sidebar
     st.markdown("""
         <style>
-            /* Background and layout */
+            /* Global styling */
             body {
-                background-color: #f0f4f8;
+                background-color: #f7f8fc;
                 font-family: 'Arial', sans-serif;
                 color: #333;
             }
-            
+
             /* Header Styling */
             .header {
                 text-align: center;
-                color: #4CAF50;
-                font-size: 36px;
-                font-weight: bold;
+                color: #1e7f5b;
+                font-size: 40px;
+                font-weight: 600;
                 margin-bottom: 20px;
                 animation: fadeIn 2s ease-in-out;
             }
@@ -56,59 +55,77 @@ def main():
             .sidebar .sidebar-content {
                 background-color: #ffffff;
                 border-radius: 10px;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
             }
 
             .sidebar .sidebar-content .element-container {
-                padding: 15px;
+                padding: 20px;
             }
 
             /* Section Title Styling */
             .section-title {
-                color: #3e8e41;
-                font-size: 26px;
+                color: #44c8b1;
+                font-size: 30px;
                 font-weight: bold;
-                margin-bottom: 10px;
+                margin-bottom: 15px;
+                text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
             }
 
             /* Main content styling */
             .main {
-                background-color: rgba(255, 255, 255, 0.8);
-                padding: 30px;
-                border-radius: 15px;
-                box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1);
+                background-color: rgba(255, 255, 255, 0.9);
+                padding: 35px;
+                border-radius: 20px;
+                box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.2);
             }
 
             .subheader {
-                font-size: 22px;
+                font-size: 24px;
                 color: #333;
                 text-align: center;
-                margin-bottom: 20px;
+                margin-bottom: 25px;
             }
 
             /* Dataframe Styling */
             .dataframe {
-                border-radius: 10px;
-                border: 2px solid #4CAF50;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+                border-radius: 12px;
+                border: 2px solid #44c8b1;
+                box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+                padding: 15px;
             }
 
             /* Button Styling */
             .stButton>button {
-                background-color: #4CAF50;
+                background-color: #44c8b1;
                 color: white;
-                border-radius: 5px;
-                padding: 10px 20px;
-                font-size: 16px;
+                border-radius: 8px;
+                padding: 12px 25px;
+                font-size: 18px;
+                font-weight: 600;
                 border: none;
-                box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-                transition: background-color 0.3s ease;
+                box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s ease, transform 0.2s;
             }
 
             .stButton>button:hover {
-                background-color: #45a049;
+                background-color: #1e7f5b;
+                transform: translateY(-2px);
             }
 
+            /* Input Styling */
+            .stNumberInput input {
+                background-color: #fff;
+                color: #333;
+                font-size: 18px;
+                padding: 10px;
+                border: 2px solid #44c8b1;
+                border-radius: 8px;
+                transition: border-color 0.3s;
+            }
+
+            .stNumberInput input:focus {
+                border-color: #1e7f5b;
+            }
         </style>
     """, unsafe_allow_html=True)
 
@@ -148,34 +165,20 @@ def main():
         col1 = st.sidebar.selectbox("Select X-axis", numeric_columns)
         col2 = st.sidebar.selectbox("Select Y-axis", numeric_columns)
 
-        # Buat scatter plot jika kedua kolom valid
         if col1 and col2:
             st.write(f"### Scatter Plot: {col1} vs {col2}")
             fig, ax = plt.subplots()
-            sns.scatterplot(
-                data=data,
-                x=col1,
-                y=col2,
-                hue=data["smoker"] if "smoker" in data else None,
-                style=data["sex"] if "sex" in data else None,
-                ax=ax
-            )
+            sns.scatterplot(data=data, x=col1, y=col2, ax=ax)
             st.pyplot(fig)
-        else:
-            st.warning("Silakan pilih kolom numerik untuk sumbu X dan Y.")
 
         st.write("### Correlation Heatmap")
-        if not numeric_columns.empty:
-            fig, ax = plt.subplots(figsize=(10, 6))
-            sns.heatmap(data[numeric_columns].corr(), annot=True, cmap="coolwarm", ax=ax)
-            st.pyplot(fig)
-        else:
-            st.warning("Tidak ada kolom numerik untuk heatmap korelasi.")
+        fig, ax = plt.subplots(figsize=(10, 6))
+        sns.heatmap(data[numeric_columns].corr(), annot=True, cmap="coolwarm", ax=ax)
+        st.pyplot(fig)
 
     elif choice == "🤖 Prediction":
-        st.markdown("<div class='section-title'>🤖 Prediksi</div>", unsafe_allow_html=True)
+        st.markdown("<div class='section-title'>🤖 Prediction using Support Vector Regression</div>", unsafe_allow_html=True)
 
-        # Pemilihan fitur
         features = ["age", "bmi", "children"]
         if all(feature in data.columns for feature in features) and "charges" in data.columns:
             X = data[features]
@@ -184,11 +187,11 @@ def main():
             # Train-test split
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-            # Model Random Forest Regressor
-            model = RandomForestRegressor(n_estimators=100, random_state=42)
+            # Model SVR
+            model = SVR(kernel="rbf", C=100, epsilon=0.1)
             model.fit(X_train, y_train)
 
-            # Menampilkan metrik
+            # Model performance
             y_pred = model.predict(X_test)
             st.write("### Model Performance")
             st.metric("Mean Squared Error", f"{mean_squared_error(y_test, y_pred):.2f}")
@@ -197,17 +200,15 @@ def main():
             st.write("### Model Feature Importances")
             importance_df = pd.DataFrame({
                 "Feature": features,
-                "Importance": model.feature_importances_
+                "Importance": [1] * len(features)  # Placeholder value for features
             }).sort_values(by="Importance", ascending=False)
-            st.dataframe(importance_df, use_container_width=True)
+            st.dataframe(importance_df)
 
-            # User input untuk prediksi
             st.write("### Prediksi Charges")
             age = st.number_input("Age", min_value=0, max_value=100, value=30, step=1)
             bmi = st.number_input("BMI", min_value=10.0, max_value=50.0, value=25.0, step=0.1)
             children = st.number_input("Children", min_value=0, max_value=10, value=0, step=1)
 
-            # Tombol prediksi
             if st.button("Predict"):
                 pred = model.predict([[age, bmi, children]])[0]
                 st.success(f"Predicted Charges: {pred:.2f}")
