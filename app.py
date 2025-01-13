@@ -143,7 +143,8 @@ def main():
             <p class="subheader">Analisis Data, Visualisasikan Wawasan, dan Prediksi Hasil Secara Mudah.</p>""",
             unsafe_allow_html=True,
         )
-        st.image("venv/img/data.png", caption="Data Analysis App", use_container_width=True, width=300)
+        image_url ="https://media.licdn.com/dms/image/v2/D5612AQF8QkRmuUEn5A/article-cover_image-shrink_720_1280/article-cover_image-shrink_720_1280/0/1694496625562?e=2147483647&v=beta&t=zjfjMEJYaLYM3qCpOOjNrQUxmBJOpIJhPok7h6rKenk"
+        st.image(image_url, caption="Data Analysis App", use_container_width=True, width=300)
 
     elif choice == "📈 Data Exploration":
         st.markdown("<div class='section-title'>🔍 Data Exploration</div>", unsafe_allow_html=True)
