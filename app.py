@@ -38,7 +38,7 @@ def main():
         <style>
             /* Global styling */
             body {
-                background-color: #00000;
+                background-color: #212121;
                 font-family: 'Arial', sans-serif;
                 color: #333;
             }
@@ -46,7 +46,7 @@ def main():
             /* Header Styling */
             .header {
                 text-align: center;
-                color: #1e7f5b;
+                color: #8E1616;
                 font-size: 40px;
                 font-weight: 600;
                 margin-bottom: 20px;
@@ -89,7 +89,7 @@ def main():
 
             .subheader {
                 font-size: 24px;
-                color: #333;
+                color: #D84040;
                 text-align: center;
                 margin-bottom: 25px;
             }
