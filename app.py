@@ -144,7 +144,7 @@ def main():
             unsafe_allow_html=True,
         )
         image_url ="https://i.imgur.com/MdMCXbW.png"
-        st.image(image_url, caption="Data Analysis App", use_container_width=True, width=300)
+        st.image(image_url, caption="Data Analysis App", use_container_width=True)
 
     elif choice == "📈 Data Exploration":
         st.markdown("<div class='section-title'>🔍 Data Exploration</div>", unsafe_allow_html=True)
