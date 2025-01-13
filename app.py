@@ -143,7 +143,7 @@ def main():
             <p class="subheader">Analisis Data, Visualisasikan Wawasan, dan Prediksi Hasil Secara Mudah.</p>""",
             unsafe_allow_html=True,
         )
-        image_url ="https://drive.usercontent.google.com/download?id=1yo10S4oy5siXOYoh22KknmJHfRlA2HX5"
+        image_url ="https://i.imgur.com/MdMCXbW.png"
         st.image(image_url, caption="Data Analysis App", use_container_width=True, width=300)
 
     elif choice == "📈 Data Exploration":
